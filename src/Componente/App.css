@@ -49,3 +49,11 @@ form {
 span {
     text-align: center;
 }
+
+.pas {
+    padding: 10px;
+}
+
+input {
+    margin: 10px !important;
+}

@@ -20,25 +20,25 @@ const App = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const newTicket = { ...formData, id: Date.now().toString() };
+        const newTicket = { ...formData, id: Date.now().toString() }; //
         setTickets([...tickets, newTicket]);
         setFormData({ customer: '', title: '', sheet: '', position: 'Assigned' });
     };
 
-    const handleDragOver = (e) => {
-        e.preventDefault();
-    };
+    // const handleDragOver = (e) => {
+    //     e.preventDefault();
+    // };
 
-    const handleDrop = (e, position) => {
-        const id = e.dataTransfer.getData('text/plain');
-        const updatedTickets = tickets.map((ticket) => {
-            if (ticket.id === id) {
-                return { ...ticket, position };
-            }
-            return ticket;
-        });
-        setTickets(updatedTickets);
-    };
+    // const handleDrop = (e, position) => {
+    //     const id = e.dataTransfer.getData('text/plain'); //
+    //     const updatedTickets = tickets.map((ticket) => {
+    //         if (ticket.id === id) {
+    //             return { ...ticket, position };
+    //         }
+    //         return ticket;
+    //     });
+    //     setTickets(updatedTickets);
+    // };
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -68,7 +68,7 @@ const App = () => {
                     Sheet No:
                     <input type="number" name="sheet" value={formData.sheet} onChange={handleChange} required />
                 </label>
-                <label>
+                <label className='pas'>
                     Position:
                     <select name="position" value={formData.position} onChange={handleChange}>
                         <option value="Assigned">Assigned</option>
@@ -82,52 +82,48 @@ const App = () => {
             </form>
             <div className="filter">
                 Filter by Position:
-                <label>
+                <label className='pas'>
                     <input type="radio" name="filter" value="All" checked={filter === 'All'} onChange={handleFilterChange} />
                     All
                 </label>
-                <label>
+                <label className='pas'>
                     <input type="radio" name="filter" value="Assigned" checked={filter === 'Assigned'} onChange={handleFilterChange} />
                     Assigned
                 </label>
-                <label>
+                <label className='pas'>
                     <input type="radio" name="filter" value="In Process" checked={filter === 'In Process'} onChange={handleFilterChange} />
                     In Process
                 </label>
-                <label>
+                <label className='pas'>
                     <input type="radio" name="filter" value="Deployed" checked={filter === 'Deployed'} onChange={handleFilterChange} />
                     Deployed
                 </label>
-                <label>
+                <label className='pas'>
                     <input type="radio" name="filter" value="Resolved" checked={filter === 'Resolved'} onChange={handleFilterChange} />
                     Resolved
                 </label>
-                <label>
+                <label className='pas'>
                     <input type="radio" name="filter" value="Closed" checked={filter === 'Closed'} onChange={handleFilterChange} />
                     Closed
                 </label>
             </div>
             <div className="dashboard">
-                <div
-                    className="section"
-                    onDragOver={(e) => handleDragOver(e)}
-                    onDrop={(e) => handleDrop(e, 'Assigned')}
-                >
-                    <div className="ticket-table">
-                        {tickets.filter((ticket) => filter === 'All' || ticket.position === filter).map((ticket) => (
-                            <div key={ticket.id} className={`ticket ${ticket.position === 'Closed' && ticket.sheet === formData.sheet ? 'red' : ''}`}>
-                                <div className="row">
-                                    <div className="col-30">{ticket.customer}</div>
-                                    <div className="col-30">{ticket.title}</div>
-                                    <div className="col-30">{ticket.sheet}</div>
-                                    <div className="col-30">{ticket.position}</div>
-                                    <div className="col-30">
-                                        <button onClick={() => handleDelete(ticket.id)}>Delete</button>
-                                    </div>
+                {/* <div className="section" onDragOver={(e) => handleDragOver(e)} onDrop={(e) => handleDrop(e, 'Assigned')} > */}
+                <div className="ticket-table">
+                    {tickets.filter((ticket) => filter === 'All' || ticket.position === filter).map((ticket) => (
+                        <div key={ticket.id} className='ticket' >
+                            <div className="row">
+                                <div className="col-30">{ticket.customer}</div>
+                                <div className="col-30">{ticket.title}</div>
+                                <div className="col-30">{ticket.sheet}</div>
+                                <div className="col-30">{ticket.position}</div>
+                                <div className="col-30">
+                                    <button onClick={() => handleDelete(ticket.id)}>Delete</button>
                                 </div>
                             </div>
-                        ))}
-                    </div>
+                        </div>
+                    ))}
+                    {/* </div> */}
                 </div>
             </div>
         </div>
