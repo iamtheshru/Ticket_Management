@@ -1,0 +1,31 @@
+.box {
+    height: 80px;
+    width: 180px;
+}
+
+.img {
+    aspect-ratio: 2/2;
+    object-fit: cover;
+}
+
+.btn {
+    padding: 10px !important;
+    color: white !important;
+}
+
+.bg {
+    background-color: rgba(210, 175, 198, 0.459);
+    border-radius: 10px;
+}
+
+.clr {
+    color: rgb(224, 38, 190) ;
+}
+.btn-bg{
+    background-color: rgb(224, 38, 190) !important ;
+}
+
+.img-bg {
+    background-color: rgba(164, 39, 129, 0.409);
+    border-radius: 10px 10px 0 0;
+}

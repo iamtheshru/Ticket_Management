@@ -1,0 +1,51 @@
+.App {
+    text-align: center;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+.section {
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.section h2 {
+    margin-top: 0;
+}
+
+.ticket-table {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ticket {
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+.filter {
+    margin-bottom: 20px;
+}
+
+.filter label {
+    margin-right: 10px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.col-30 {
+    width: 20%;
+}
+
+span {
+    text-align: center;
+}
