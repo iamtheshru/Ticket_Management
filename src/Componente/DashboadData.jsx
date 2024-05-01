@@ -20,17 +20,17 @@ const App = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const newTicket = { ...formData, id: Date.now().toString() }; //
+        const newTicket = { ...formData, id: Date.now().toString() };
         setTickets([...tickets, newTicket]);
         setFormData({ customer: '', title: '', sheet: '', position: 'Assigned' });
     };
 
-    // const handleDragOver = (e) => {
+    // const handleDragOver = (e) => { 
     //     e.preventDefault();
-    // };
+    // };  //drop event ko handla karta hai.
 
     // const handleDrop = (e, position) => {
-    //     const id = e.dataTransfer.getData('text/plain'); //
+    //     const id = e.dataTransfer.getData('text/plain'); 
     //     const updatedTickets = tickets.map((ticket) => {
     //         if (ticket.id === id) {
     //             return { ...ticket, position };
@@ -38,7 +38,7 @@ const App = () => {
     //         return ticket;
     //     });
     //     setTickets(updatedTickets);
-    // };
+    // }; 
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
