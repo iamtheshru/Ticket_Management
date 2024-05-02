@@ -87,7 +87,7 @@ const App = () => {
                     {tickets.map((ticket) => {
                         if (ticket.position === 'Assigned') {
                             return (
-                                <div key={ticket.id} draggable>
+                                <div key={ticket.id} draggable onDragStart={(e) => handleDragStart(e, ticket.id)}>
                                     <strong>{ticket.title}</strong>
                                     <p>Customer: {ticket.customer}</p>
                                     <p>Position: {ticket.position}</p>
@@ -151,7 +151,7 @@ const App = () => {
                     {tickets.map((ticket) => {
                         if (ticket.position === 'Closed') {
                             return (
-                                <div key={ticket.id} draggable onDragStart={(e) => handleDragStart(e, ticket.id)}>
+                                <div key={ticket.id} draggable >
                                     <strong>{ticket.title}</strong>
                                     <p>Customer: {ticket.customer}</p>
                                     <p>Position: {ticket.position}</p>
