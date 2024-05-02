@@ -1,12 +1,15 @@
+// App.js
 
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
 const App = () => {
+    // State to manage tickets
     const [tickets, setTickets] = useState([]);
-    const [formData, setFormData] = useState({ customer: '', title: '', sheet: '', position: 'Assigned' });
-    const [filter, setFilter] = useState('All');
+    // State to manage form data
+    const [formData, setFormData] = useState({ customer: '', title: '', position: 'Assigned' });
 
+    // Load tickets from local storage on initial render
     useEffect(() => {
         const savedTickets = JSON.parse(localStorage.getItem('tickets'));
         if (savedTickets) {
@@ -14,47 +17,48 @@ const App = () => {
         }
     }, []);
 
+    // Save tickets to local storage whenever tickets state changes
     useEffect(() => {
         localStorage.setItem('tickets', JSON.stringify(tickets));
     }, [tickets]);
 
+    // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
         const newTicket = { ...formData, id: Date.now().toString() };
         setTickets([...tickets, newTicket]);
-        setFormData({ customer: '', title: '', sheet: '', position: 'Assigned' });
+        setFormData({ customer: '', title: '', position: 'Assigned' });
     };
 
-    // const handleDragOver = (e) => { 
-    //     e.preventDefault();
-    // };  //drop event ko handla karta hai.
+    // Handle drag over event
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    };
 
-    // const handleDrop = (e, position) => {
-    //     const id = e.dataTransfer.getData('text/plain'); 
-    //     const updatedTickets = tickets.map((ticket) => {
-    //         if (ticket.id === id) {
-    //             return { ...ticket, position };
-    //         }
-    //         return ticket;
-    //     });
-    //     setTickets(updatedTickets);
-    // }; 
+    // Handle drop event to update ticket position
+    const handleDrop = (e, position) => {
+        const id = e.dataTransfer.getData('text/plain');
+        const updatedTickets = tickets.map((ticket) => {
+            if (ticket.id === id) {
+                return { ...ticket, position };
+            }
+            return ticket;
+        });
+        setTickets(updatedTickets);
+    };
 
+    // Handle form input change
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleFilterChange = (e) => {
-        setFilter(e.target.value);
-    };
-
-    const handleDelete = (id) => {
-        const updatedTickets = tickets.filter((ticket) => ticket.id !== id);
-        setTickets(updatedTickets);
+    const handleDragStart = (e, id) => {
+        e.dataTransfer.setData('text/plain', id);
     };
     return (
         <div className="App">
             <h1>Ticket Management System</h1>
+            {/* Ticket creation form */}
             <form onSubmit={handleSubmit}>
                 <label>
                     Customer Name:
@@ -65,10 +69,6 @@ const App = () => {
                     <input type="text" name="title" value={formData.title} onChange={handleChange} required />
                 </label>
                 <label>
-                    Sheet No:
-                    <input type="number" name="sheet" value={formData.sheet} onChange={handleChange} required />
-                </label>
-                <label className='pas'>
                     Position:
                     <select name="position" value={formData.position} onChange={handleChange}>
                         <option value="Assigned">Assigned</option>
@@ -80,55 +80,90 @@ const App = () => {
                 </label>
                 <button type="submit">Create Ticket</button>
             </form>
-            <div className="filter">
-                Filter by Position:
-                <label className='pas'>
-                    <input type="radio" name="filter" value="All" checked={filter === 'All'} onChange={handleFilterChange} />
-                    All
-                </label>
-                <label className='pas'>
-                    <input type="radio" name="filter" value="Assigned" checked={filter === 'Assigned'} onChange={handleFilterChange} />
-                    Assigned
-                </label>
-                <label className='pas'>
-                    <input type="radio" name="filter" value="In Process" checked={filter === 'In Process'} onChange={handleFilterChange} />
-                    In Process
-                </label>
-                <label className='pas'>
-                    <input type="radio" name="filter" value="Deployed" checked={filter === 'Deployed'} onChange={handleFilterChange} />
-                    Deployed
-                </label>
-                <label className='pas'>
-                    <input type="radio" name="filter" value="Resolved" checked={filter === 'Resolved'} onChange={handleFilterChange} />
-                    Resolved
-                </label>
-                <label className='pas'>
-                    <input type="radio" name="filter" value="Closed" checked={filter === 'Closed'} onChange={handleFilterChange} />
-                    Closed
-                </label>
-            </div>
+            {/* Ticket dashboard */}
             <div className="dashboard">
-                {/* <div className="section" onDragOver={(e) => handleDragOver(e)} onDrop={(e) => handleDrop(e, 'Assigned')} > */}
-                <div className="ticket-table">
-                    {tickets.filter((ticket) => filter === 'All' || ticket.position === filter).map((ticket) => (
-                        <div key={ticket.id} className='ticket' >
-                            <div className="row">
-                                <div className="col-30">{ticket.customer}</div>
-                                <div className="col-30">{ticket.title}</div>
-                                <div className="col-30">{ticket.sheet}</div>
-                                <div className="col-30">{ticket.position}</div>
-                                <div className="col-30">
-                                    <button onClick={() => handleDelete(ticket.id)}>Delete</button>
+                <div className="section" onDragOver={(e) => handleDragOver(e)} onDrop={(e) => handleDrop(e, 'Assigned')}>
+                    <h2>Assigned</h2>
+                    {tickets.map((ticket) => {
+                        if (ticket.position === 'Assigned') {
+                            return (
+                                <div key={ticket.id} draggable>
+                                    <strong>{ticket.title}</strong>
+                                    <p>Customer: {ticket.customer}</p>
+                                    <p>Position: {ticket.position}</p>
+
                                 </div>
-                            </div>
-                        </div>
-                    ))}
-                    {/* </div> */}
+                            );
+                        }
+                        return null;
+                    })}
+                </div>
+                <div className="section" onDragOver={(e) => handleDragOver(e)} onDrop={(e) => handleDrop(e, 'In Process')}>
+                    <h2>In Process</h2>
+                    {tickets.map((ticket) => {
+                        if (ticket.position === 'In Process') {
+                            return (
+                                <div key={ticket.id} draggable onDragStart={(e) => handleDragStart(e, ticket.id)}>
+                                    <strong>{ticket.title}</strong>
+                                    <p>Customer: {ticket.customer}</p>
+                                    <p>Position: {ticket.position}</p>
+
+                                </div>
+                            );
+                        }
+                        return null;
+                    })}
+                </div>
+                <div className="section" onDragOver={(e) => handleDragOver(e)} onDrop={(e) => handleDrop(e, 'Resolved')}>
+                    <h2>Resolved</h2>
+                    {tickets.map((ticket) => {
+                        if (ticket.position === 'Resolved') {
+                            return (
+                                <div key={ticket.id} draggable onDragStart={(e) => handleDragStart(e, ticket.id)}>
+                                    <strong>{ticket.title}</strong>
+                                    <p>Customer: {ticket.customer}</p>
+                                    <p>Position: {ticket.position}</p>
+
+                                </div>
+                            );
+                        }
+                        return null;
+                    })}
+                </div>
+                <div className="section" onDragOver={(e) => handleDragOver(e)} onDrop={(e) => handleDrop(e, 'Deployed')}>
+                    <h2>Deployed</h2>
+                    {tickets.map((ticket) => {
+                        if (ticket.position === 'Deployed') {
+                            return (
+                                <div key={ticket.id} draggable onDragStart={(e) => handleDragStart(e, ticket.id)}>
+                                    <strong>{ticket.title}</strong>
+                                    <p>Customer: {ticket.customer}</p>
+                                    <p>Position: {ticket.position}</p>
+
+                                </div>
+                            );
+                        }
+                        return null;
+                    })}
+                </div>
+                <div className="section" onDragOver={(e) => handleDragOver(e)} onDrop={(e) => handleDrop(e, 'Closed')}>
+                    <h2>Closed</h2>
+                    {tickets.map((ticket) => {
+                        if (ticket.position === 'Closed') {
+                            return (
+                                <div key={ticket.id} draggable onDragStart={(e) => handleDragStart(e, ticket.id)}>
+                                    <strong>{ticket.title}</strong>
+                                    <p>Customer: {ticket.customer}</p>
+                                    <p>Position: {ticket.position}</p>
+                                </div>
+                            );
+                        }
+                        return null;
+                    })}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 
 export default App;
-
