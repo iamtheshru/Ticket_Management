@@ -26,8 +26,10 @@ const App = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const newTicket = { ...formData, id: Date.now().toString() };
+        // console.log(newTicket);
         setTickets([...tickets, newTicket]);
         setFormData({ customer: '', title: '', position: 'Assigned' });
+        // console.log(tickets);
     };
 
     // Handle drag over event
@@ -38,6 +40,8 @@ const App = () => {
     // Handle drop event to update ticket position
     const handleDrop = (e, position) => {
         const id = e.dataTransfer.getData('text/plain');
+        console.log("handleDrop", id);
+
         const updatedTickets = tickets.map((ticket) => {
             if (ticket.id === id) {
                 return { ...ticket, position };
@@ -53,6 +57,8 @@ const App = () => {
     };
 
     const handleDragStart = (e, id) => {
+        console.log("handleDragStart", id);
+
         e.dataTransfer.setData('text/plain', id);
     };
     return (
